@@ -1,0 +1,866 @@
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+local Window = OrionLib:MakeWindow({Name = "FluzHub", HidePremium = false, SaveConfig = false, ConfigFolder = "OrionTest", IntroText = "FluzHub"})
+
+
+    local Tab = Window:MakeTab({
+        Name = "Aimlock",
+        Icon = "rbxassetid://13080532278",
+        PremiumOnly = false
+    })
+    Tab:AddButton({ 
+        Name = "Trace Lock (Q)",
+        Callback = function()
+            Settings = {
+                Kalslock = {
+                Enabled = true,
+                Key = "q",
+                showdot = true,
+                airshots = true,
+                notifaction = true,
+                pingprediction = true,
+                FOV = math.huge,
+                RESOVLER = true,
+                Tracer = true,
+                TracerColor = Color3.new(0, 255, 238),
+                TracerTransparency = 0.75,
+                TracerThickness = 5,
+                Circles = false,
+                CircleFOV = 500,
+                CircleColor = Color3.new(255, 255, 255),
+                CircleThickness = 2,
+                CircleFilled = true,
+                CircleTransparency = 0.10,
+                CircleTransparencyOutline = 0,
+                OutlineColor = Color3.new(255, 255, 255),
+                Texts = false, 
+                TextColor = Color3.new(255, 255, 255),
+                TextSize = 35,
+                TextInput = "skidded",
+                Hitbox = true,
+                NoBulletDelay = false,
+                Autoclicker = false,
+                AutoclickerTime = 0.01,
+                AutoclickerKey = "v",
+                AnimationPack = false
+         
+        }
+        }
+         
+        --[[
+            Parts - / HumanoidRootPart / LowerTorso / UpperTorso / Head 
+        ]]
+         
+                local SelectedPart = "HumanoidRootPart"
+                local Prediction = true
+                local PredictionValue = 0.132
+         
+         
+         
+         local AnchorCount = 0
+                    local MaxAnchor = 50
+         
+                        local CC = game:GetService"Workspace".CurrentCamera
+                            local Plr;
+                                local enabled = false
+                                    local accomidationfactor = 0.132
+                        local mouse = game.Players.LocalPlayer:GetMouse()
+         
+                                    local Inset = game:GetService("GuiService"):GetGuiInset().Y
+                        local Line = Drawing.new("Line")
+                            local Text = Drawing.new("Text")
+                                  local Circle = Drawing.new("Circle")
+                                  local Circle1 = Drawing.new("Circle")
+         
+         
+                                   _G.Types = {
+                    Ball = Enum.PartType.Ball,
+                    Block = Enum.PartType.Block, 
+                    Cylinder = Enum.PartType.Cylinder
+                }
+         
+                                  local placemarker = Instance.new("Part", game.Workspace)
+                                  placemarker.Shape = _G.Types.Ball
+                                  placemarker.Material = "ForceField"
+                                  placemarker.Color = Color3.new(0, 1, 1)
+         
+            function makemarker(Parent, Adornee, Color, Size, Size2)
+                local e = Instance.new("BillboardGui", Parent)
+                e.Name = "PP"
+                e.Adornee = Adornee
+                e.Size = UDim2.new(Size, Size2, Size, Size2)
+                e.AlwaysOnTop = Settings.Kalslock.showdot
+                local a = Instance.new("Frame", e)
+                if Settings.Kalslock.showdot == true then
+                a.Size = UDim2.new(1, 0, 1, 0)
+                else
+                a.Size = UDim2.new(0, 0, 0, 0)
+                end
+                if Settings.Kalslock.showdot == true then
+                a.Transparency = 0
+                a.BackgroundTransparency = 0
+                else
+                a.Transparency = 1
+                a.BackgroundTransparency = 1
+                end
+                a.BackgroundColor3 = Color
+                local g = Instance.new("UICorner", a)
+                if Settings.Kalslock.showdot == false then
+                g.CornerRadius = UDim.new(0, 0)
+                else
+                g.CornerRadius = UDim.new(1, 1) 
+                end
+                return(e)
+            end
+         
+         
+            local data = game.Players:GetPlayers()
+            function noob(player)
+                local character
+                repeat wait() until player.Character
+                local handler = makemarker(guimain, player.Character:WaitForChild(SelectedPart), Color3.fromRGB(0, 255, 229), 0.3, 3)
+                handler.Name = player.Name
+                player.CharacterAdded:connect(function(Char) handler.Adornee = Char:WaitForChild(SelectedPart) end)
+         
+         
+                spawn(function()
+                    while wait() do
+                        if player.Character then
+                        end
+                    end
+                end)
+            end
+         
+            for i = 1, #data do
+                if data[i] ~= game.Players.LocalPlayer then
+                    noob(data[i])
+                end
+            end
+         
+            game.Players.PlayerAdded:connect(function(Player)
+                noob(Player)
+            end)
+         
+            spawn(function()
+                placemarker.Anchored = true
+                placemarker.CanCollide = false
+                if Settings.Kalslock.showdot == true then
+                placemarker.Size = Vector3.new(11, 11, 11)
+                else
+                placemarker.Size = Vector3.new(0, 0, 0)
+                end
+                if Settings.Kalslock.Hitbox == true then
+                placemarker.Transparency = 0.30
+                else
+                placemarker.Transparency = 1
+                end
+                if Settings.Kalslock.showdot then
+                makemarker(placemarker, placemarker, Color3.fromRGB(0, 255, 238), 0.80, 0)
+                end
+            end)
+         
+            game.Players.LocalPlayer:GetMouse().KeyDown:Connect(function(k)
+                if k == Settings.Kalslock.Key and Settings.Kalslock.Enabled then
+                    if enabled == true then
+                        enabled = false
+                        if Settings.Kalslock.notifaction == true then
+                            Plr = getClosestPlayerToCursor()
+                        game.StarterGui:SetCore("SendNotification", {
+                            Title = "Kal Skidded This";
+                            Text = "  Unlocked",
+                            Icon = "http://www.roblox.com/asset/?id=5314810647",
+                            Duration = 3
+                        })
+                    end
+                    else
+                        Plr = getClosestPlayerToCursor()
+                        enabled = true
+                        if Settings.Kalslock.notifaction == true then
+         
+                            game.StarterGui:SetCore("SendNotification", {
+                                Title = "Kal Skidded This";
+                                Text = "  Target: "..tostring(Plr.Character.Humanoid.DisplayName),
+                                Icon = "http://www.roblox.com/asset/?id=8709610734",
+                                Duration = 3
+                            })
+         
+                        end
+                    end
+                end
+            end)
+         
+         
+         
+            function getClosestPlayerToCursor()
+                local closestPlayer
+                local shortestDistance = Settings.Kalslock.FOV
+         
+                for i, v in pairs(game.Players:GetPlayers()) do
+                    if v ~= game.Players.LocalPlayer and v.Character and v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health ~= 0 and v.Character:FindFirstChild("HumanoidRootPart") then
+                        local pos = CC:WorldToViewportPoint(v.Character.PrimaryPart.Position)
+                        local magnitude = (Vector2.new(pos.X, pos.Y) - Vector2.new(mouse.X, mouse.Y)).magnitude
+                        if magnitude < shortestDistance then
+                            closestPlayer = v
+                            shortestDistance = magnitude
+                        end
+                    end
+                end
+                return closestPlayer
+            end
+         
+            local pingvalue = nil;
+            local split = nil;
+            local ping = nil;
+         
+            game:GetService"RunService".Stepped:connect(function()
+                if enabled and Plr.Character ~= nil and Plr.Character:FindFirstChild("HumanoidRootPart") then
+                    placemarker.CFrame = CFrame.new(Plr.Character.HumanoidRootPart.Position)
+                                    local Vector1 = CC:WorldToViewportPoint(Plr.Character.HumanoidRootPart.Position)
+                    Line.Color = Settings.Kalslock.TracerColor
+                        Line.Transparency = Settings.Kalslock.TracerTransparency
+                        Line.Thickness = Settings.Kalslock.TracerThickness
+                        Line.From = Vector2.new(mouse.X, mouse.Y + Inset)
+                        Line.To = Vector2.new(Vector1.X, Vector1.Y)
+                        Line.Visible = Settings.Kalslock.Tracer
+                        Text.Position = Vector2.new(mouse.X, mouse.Y + Inset)
+                        Text.Visible = Settings.Kalslock.Texts
+                        Text.Center = true
+                        Text.Outline = true
+                        Text.Font = 1
+                        Text.Size = Settings.Kalslock.TextSize
+                        Text.Color = Settings.Kalslock.TextColor
+                        Text.Text = Settings.Kalslock.TextInput
+                        Circle.Position = Vector2.new(mouse.X, mouse.Y + Inset)
+                        Circle.Visible = Settings.Kalslock.Circles
+                        Circle.Thickness = 1.5
+                        Circle.Thickness = Settings.Kalslock.CircleThickness
+                        Circle.Radius = Settings.Kalslock.CircleFOV
+                        Circle.Color = Settings.Kalslock.CircleColor
+                        Circle.Filled = Settings.Kalslock.CircleFilled
+                        Circle.Transparency = Settings.Kalslock.CircleTransparency
+                        Circle1.Visible = true
+                        Circle1.Radius = Settings.Kalslock.CircleTransparencyOutline
+                        Circle1.Position = Vector2.new(mouse.X, mouse.Y + Inset)
+                        Circle1.Thickness = 5
+                        Circle1.Color = Settings.Kalslock.OutlineColor
+         
+                else
+                        Circle.Visible = false
+                        Line.Visible = false
+                        Text.Visible = false
+                        Circle1.Visible = false
+                    placemarker.CFrame = CFrame.new(0, 9999, 0)
+                end
+                if Settings.Kalslock.pingprediction == true then
+                     pingvalue = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
+                     split = string.split(pingvalue,'(')
+                     ping = tonumber(split[1])
+                    if ping < 130 then
+                        PredictionValue = 0.151
+                    elseif ping < 125 then
+                        PredictionValue = 0.149
+                    elseif ping < 110 then
+                        PredictionValue = 0.146
+                    elseif ping < 105 then
+                        PredictionValue = 0.138
+                    elseif ping < 90 then
+                        PredictionValue = 0.136
+                    elseif ping < 80 then
+                        PredictionValue = 0.134
+                    elseif ping < 70 then
+                        PredictionValue = 0.131
+                    elseif ping < 60 then
+                        PredictionValue = 0.1229
+                    elseif ping < 50 then
+                        PredictionValue = 0.1225
+                    elseif ping < 40 then
+                        PredictionValue = 0.1256
+                    end
+                end
+            end)
+         
+            local mt = getrawmetatable(game)
+            local old = mt.__namecall
+            setreadonly(mt, false)
+            mt.__namecall = newcclosure(function(...)
+                local args = {...}
+                if enabled and getnamecallmethod() == "FireServer" and args[2] == "UpdateMousePos" and Settings.Kalslock.Enabled and Plr.Character ~= nil then
+         
+                    -- args[3] = Plr.Character.HumanoidRootPart.Position+(Plr.Character.HumanoidRootPart.Velocity*accomidationfactor)
+                    --[[
+                    if Settings.Kalslock.airshots == true then
+                        if game.Workspace.Players[Plr.Name].Humanoid:GetState() == Enum.HumanoidStateType.Freefall then -- Plr.Character:WaitForChild("Humanoid"):GetState() == Enum.HumanoidStateType.Freefall
+         
+                            --// Airshot
+                            args[3] = Plr.Character.LeftFoot.Position+(Plr.Character.LeftFoot.Velocity*PredictionValue)
+         
+                        else
+                            args[3] = Plr.Character.HumanoidRootPart.Position+(Plr.Character.HumanoidRootPart.Velocity*PredictionValue)
+         
+                        end
+                    else
+            args[3] = Plr.Character.HumanoidRootPart.Position+(Plr.Character.HumanoidRootPart.Velocity*PredictionValue)
+            end
+            ]]
+            if Prediction == true then
+         
+            args[3] = Plr.Character[SelectedPart].Position+(Plr.Character[SelectedPart].Velocity*PredictionValue)
+         
+            else
+         
+            args[3] = Plr.Character[SelectedPart].Position
+         
+            end
+         
+            return old(unpack(args))
+            end
+            return old(...)
+            end)
+         
+            game:GetService("RunService").RenderStepped:Connect(function()
+                if Settings.Kalslock.RESOVLER == true and Plr.Character ~= nil and enabled and Settings.Kalslock.Enabled then
+                if Settings.Kalslock.airshots == true and enabled and Plr.Character ~= nil then
+         
+                if game.Workspace.Players[Plr.Name].Humanoid:GetState() == Enum.HumanoidStateType.Freefall then -- Plr.Character:WaitForChild("Humanoid"):GetState() == Enum.HumanoidStateType.Freefall
+         
+         
+         
+                if Plr.Character ~= nil and Plr.Character.HumanoidRootPart.Anchored == true then
+                AnchorCount = AnchorCount + 1
+                if AnchorCount >= MaxAnchor then
+                Prediction = false
+                wait(2)
+                AnchorCount = 0;
+                end
+                else
+                Prediction = true
+                AnchorCount = 0;
+                end
+         
+                SelectedPart = "LeftFoot"
+         
+                else
+         
+         
+                if Plr.Character ~= nil and Plr.Character.HumanoidRootPart.Anchored == true then
+                AnchorCount = AnchorCount + 1
+                if AnchorCount >= MaxAnchor then
+                Prediction = false
+                wait(2)
+                AnchorCount = 0;
+                end
+         
+                else
+                Prediction = true
+                AnchorCount = 0;
+                end
+         
+                SelectedPart = "HumanoidRootPart"
+         
+                end
+                else
+         
+         
+         
+                if Plr.Character ~= nil and Plr.Character.HumanoidRootPart.Anchored == true then
+                AnchorCount = AnchorCount + 1
+                if AnchorCount >= MaxAnchor then
+                Prediction = false
+                wait(2)
+                AnchorCount = 0;
+                end
+                else
+                 Prediction = true
+                 AnchorCount = 0;
+                end
+                SelectedPart = "HumanoidRootPart"
+                end
+                else
+                SelectedPart = "HumanoidRootPart"
+                end
+                end)
+         
+                if Settings.Kalslock.NoBulletDelay == true then
+                    local FuckDelay = game:GetService("CorePackages").Packages
+                    FuckDelay:Destroy()
+                end
+         
+                if Settings.Kalslock.Autoclicker == true then
+                    local time = Settings.Kalslock.AutoclickerTime --decrease if too slow increase if too fast
+         
+                    click = false
+                    m = game.Players.LocalPlayer:GetMouse()
+                    m.KeyDown:connect(function(key)
+                    if key == Settings.Kalslock.AutoclickerKey then
+                    if click == true then click = false
+                    elseif
+                    click == false then click = true
+         
+                    while click == true do 
+                    wait(time)
+                    mouse1click()
+                    end
+                    end
+                    end
+                    end)
+                end
+         
+          end    
+    })
+    local Macro = Window:MakeTab({
+        Name = "OTHER",
+        Icon = "rbxassetid://13080532278",
+        PremiumOnly = false
+    })
+    OrionLib:MakeNotification({
+        Name = "Welcome",
+        Content = "EURT",
+        Image = "rbxassetid://4483345998",
+        Time = 5
+    })
+    Macro:AddButton({
+        Name = "Macro (Z)",
+        Callback = function()
+            local Player = game:GetService("Players").LocalPlayer
+            local Mouse = Player:GetMouse()
+            local SpeedGlitch = false
+            Mouse.KeyDown:Connect(function(Key)
+                if Key == "z" then
+                    SpeedGlitch = not SpeedGlitch
+                    if SpeedGlitch == true then
+                        repeat game:GetService("RunService").Heartbeat:wait()
+                            keypress(0x49)
+                            game:GetService("RunService").Heartbeat:wait()
+                            keypress(0x4F)
+                            game:GetService("RunService").Heartbeat:wait()
+                            keyrelease(0x49)
+                            game:GetService("RunService").Heartbeat:wait()
+                            keyrelease(0x4F)
+                            game:GetService("RunService").Heartbeat:wait()
+                        until SpeedGlitch == false
+                    end
+                end
+            end)
+          end    
+    })
+
+
+Macro:AddButton({
+    Name = "TP (G)",
+    Callback = function()
+        key = "G"
+
+
+        local plr = game.Players.LocalPlayer
+        local chr = plr.Character or plr.CharacterAdded:Wait()
+        local uis = game:GetService("UserInputService")
+        
+        uis.InputBegan:Connect(function(keyc, sp)
+        if keyc.KeyCode == Enum.KeyCode[key] and not sp and plr:GetMouse().Target then
+          chr:WaitForChild("HumanoidRootPart").CFrame = plr:GetMouse().Hit
+        end
+        end)
+      end    
+})
+local TeleportTab = Window:MakeTab({
+	Name = "Teleporter",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+ TeleportTab:AddButton({
+	Name = "Downhill Gun Store",
+	Callback = function()
+tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(1, Enum.EasingStyle.Linear)
+tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(-579.8951416015625, 8.314776420593262, -737.3543090820312)}):Play()
+  	end    
+})
+TeleportTab:AddButton({
+	Name = "Phone Store",
+	Callback = function()
+    tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(1.1, Enum.EasingStyle.Linear)
+tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(-106.2215347290039, 21.908939361572266, -869.8880004882812)}):Play()
+  	end    
+})
+TeleportTab:AddButton({
+	Name = "Outside Da Bank",
+	Callback = function()
+tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(1.1, Enum.EasingStyle.Linear)
+tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(-361.6344299316406, 21.24999237060547, -300.07958984375)}):Play()
+  	end    
+})
+TeleportTab:AddButton({
+	Name = "Inside Da Bank",
+	Callback = function()
+tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(1.1, Enum.EasingStyle.Linear)
+tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(-442.2447814941406, 22.993148803710938, -283.674560546875)}):Play()
+  	end    
+})
+TeleportTab:AddButton({
+	Name = "Uphill Gun Store",
+	Callback = function()
+tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(1.1, Enum.EasingStyle.Linear)
+tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(480.51513671875, 48.070491790771484, -623.1339111328125)}):Play()
+  	end    
+})
+TeleportTab:AddButton({
+	Name = "Near Bank",
+	Callback = function()
+tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(1.1, Enum.EasingStyle.Linear)
+tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(-466.6380310058594, 21.256370544433594, -353.8649597167969)}):Play()
+  	end    
+})
+TeleportTab:AddButton({
+	Name = "Furniture Store",
+	Callback = function()
+tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(1.1, Enum.EasingStyle.Linear)
+tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(-487.7236633300781, 21.953092575073242, -92.18724060058594)}):Play()
+  	end    
+})
+TeleportTab:AddButton({
+	Name = "Movie Theatre",
+	Callback = function()
+tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(1.1, Enum.EasingStyle.Linear)
+tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(-1015.3779907226562, 24.600008010864258, -159.3494110107422)}):Play()
+  	end    
+})
+TeleportTab:AddButton({
+	Name = "Hospital",
+	Callback = function()
+tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(1.1, Enum.EasingStyle.Linear)
+tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(116.31018829345703, 22.799991607666016, -480.5616149902344)}):Play()
+  	end    
+})
+TeleportTab:AddButton({
+                        Name = "Admin Guns",
+                        Callback = function()
+                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-872.853516, -34.4276848, -538.013306, -0.999724388, -3.9898886e-08, -0.0234765243, -3.9204977e-08, 1, -3.00177518e-08, 0.0234765243, -2.90890814e-08, -0.999724388)
+                        end})
+TeleportTab:AddButton({
+                            Name = "Admin Foods",
+                            Callback = function()
+                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-788.053406, -39.6492004, -932.951233, 0.998369277, 2.46515359e-08, 0.0570784509, -2.8773524e-08, 1, 7.13949646e-08, -0.0570784509, -7.29209759e-08, 0.998369277) 
+                            end})
+TeleportTab:AddButton({
+                                Name = "Admin Guns 2",
+                                Callback = function()
+                                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-808.708557, -39.6492004, -932.789368, 0.999899805, 2.01343173e-08, -0.0141554065, -2.17800533e-08, 1, -1.16108232e-07, 0.0141554065, 1.16404912e-07, 0.999899805)
+                                end})
+TeleportTab:AddButton({
+                Name = "PopCorn",
+                Callback = function()
+                    getgenv().game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-995, 21.6998043, -153.100037, 1, 0, 0, 0, 1, 0, 0, 0, 1)
+                end})
+TeleportTab:AddButton({
+            Name = "Casino 1v1",
+            Callback = function()
+                getgenv().game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-962.72345, 21.2549973, -186.814987, -0.0274876002, 2.91178949e-05, 0.999621451, -5.5798846e-06, 1, -2.92823333e-05, -0.999621451, -6.38268148e-06, -0.0274876002)
+            end})
+TeleportTab:AddButton({
+                        Name = "Armor",
+                        Callback = function()
+                            getgenv().game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-607.978455, 7.44964886, -788.494263, -1.1920929e-07, 0, 1.00000012, 0, 1, 0, -1.00000012, 0, -1.1920929e-07)
+                        end})
+TeleportTab:AddButton({
+        Name = "Basketball Court",
+        Callback = function()
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-931.702271, 22.0998154, -483.427551, 0.827201366, 7.96045114e-08, -0.561905563, -4.55226505e-08, 1, 7.46533075e-08, 0.561905563, -3.61738905e-08, 0.827201366)
+          end    
+    })
+
+TeleportTab:AddButton({
+        Name = "Church",
+        Callback = function()
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(206.038925, 23.7530231, -65.9962158, -0.999446571, -4.42414425e-08, 0.033265423, -4.29629381e-08, 1, 3.91482651e-08, -0.033265423, 3.76974185e-08, -0.999446571)
+          end    
+    })
+
+TeleportTab:AddButton({
+        Name = "Slave Tables",
+        Callback = function()
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(160.377274, 76.4980164, -422.957184, -0.999685049, 5.19797823e-08, 0.0250965133, 5.36952243e-08, 1, 6.76799132e-08, -0.0250965133, 6.90061626e-08, -0.999685049)
+          end    
+    })
+TeleportTab:AddButton({
+        Name = "Flower Shop",
+        Callback = function()
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-71.2911758, 21.8499527, -337.622681, -0.999996305, -5.32965885e-08, -0.0027249034, -5.34334497e-08, 1, 5.01528135e-08, 0.0027249034, 5.02982296e-08, -0.999996305)
+          end    
+    })
+TeleportTab:AddButton({
+        Name = "Train Station",
+        Callback = function()
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-422.000214, -21.2519798, 20.6536331, -0.999949098, -2.67714473e-09, 0.010087586, -2.80548629e-09, 1, -1.27085764e-08, -0.010087586, -1.27362307e-08, -0.999949098)
+          end    
+    })
+    local PlayerTab = Window:MakeTab({
+        Name = "Player",
+        Icon = "rbxassetid://4483345998",
+        PremiumOnly = false
+    })
+    
+    Macro:AddButton({
+        Name = "Animation Pack++",
+        Callback = function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/ImNotZack/Da-Hood/main/Animation%20Pack.lua", true))()
+          end    
+    })
+    PlayerTab:AddButton({
+        Name = "FE Headless",
+        Callback = function()
+            game.Players.LocalPlayer.Character.Head:Destroy()
+        end})
+    
+    
+    
+    PlayerTab:AddButton({
+        Name = "FE Korblox",
+        Callback = function()
+            game.Players.LocalPlayer.Character.RightUpperLeg:Destroy()
+        end})
+    
+    
+    
+    PlayerTab:AddButton({
+        Name = "Right Korblox",
+        Callback = function()
+            loadstring(game:HttpGet("https://pastebin.com/raw/PQy75vhc"))()
+          end    
+    })
+    PlayerTab:AddButton({
+        Name = "Left Korblox",
+        Callback = function()
+        local _ = game.Players.LocalPlayer
+        local _ = _.Character
+        _.LeftLowerLeg.MeshId = "101851582"
+        _.LeftLowerLeg.Transparency = "1"
+        _.LeftUpperLeg.MeshId = "http://www.roblox.com/asset/?id=101851582"
+        _.LeftUpperLeg.TextureID = "http://roblox.com/asset/?id=101851582"
+        _.LeftFoot.MeshId = "101851582"
+        _.LeftFoot.Transparency = "1"
+    end
+    })
+    
+    
+    PlayerTab:AddButton({
+        Name = "Headless",
+        Callback = function()
+            loadstring(game:HttpGet("https://pastebin.com/raw/LpWpWjh5"))()
+          end    
+    })
+    PlayerTab:AddButton({
+        Name = "Rainbow body",
+        Callback = function()
+            for i, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+                if v:IsA("MeshPart") then
+                    v.Material = "ForceField"
+                    spawn(function()
+                        while wait() do
+                            for i, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+                                if v:IsA("MeshPart") then
+                                    v.Color = Color3.fromHSV(tick()%5/5,1,1)
+                                    wait()
+                                end
+                            end 
+                        end
+                    end)
+                end
+            end
+          end    
+    })
+
+    local Auto = Window:MakeTab({
+        Name = "Auto",
+        Icon = "rbxassetid://4483345998",
+        PremiumOnly = false
+    })
+   
+    Tab:AddButton({
+        Name = "Mobile Aimlock (q)",
+        Callback = function()
+            getgenv().keytoclick = "Q"
+            tool = Instance.new("Tool")
+            tool.RequiresHandle = false
+            tool.Name = keytoclick
+            tool.Activated:connect(function()
+                local vim = game:service("VirtualInputManager")
+            vim:SendKeyEvent(true, keytoclick, false, game)
+            end)
+            tool.Parent = game.Players.LocalPlayer.Backpack
+            wait(0.2)
+            local AkaliNotif = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kinlei/Dynissimo/main/Scripts/AkaliNotif.lua"))();
+            local Notify = AkaliNotif.Notify;
+            Notify({
+            Description = "sus";
+            Title = "sus";
+            Duration = 5;
+            });
+          end    
+    })
+
+    Auto:AddButton({
+        Name = "Auto Rob",
+        Callback = function()
+            _G.AutoFarm = true
+
+            -- // Variables
+            local Jogador = game:GetService("Players").LocalPlayer
+            local Drop = game:GetService("Workspace").Ignored.Drop
+            local Cashiers = game:GetService("Workspace").Cashiers
+            local opens = Cashiers:GetDescendants()
+            local num_opens = #opens
+            
+            -- // Functions
+            function Farmando()
+               while _G.AutoFarm do
+                   for _,f in pairs(Jogador:FindFirstChildOfClass("Backpack"):GetChildren()) do
+                       if f:IsA("Tool") or f:IsA("HopperBin") then
+                           if f.Name == "Combat" then
+                               f.Parent = Jogador.Character
+                           end
+                       end
+                   end
+                   wait()
+               end
+            end
+            
+            function FarmandoLoop()
+               while _G.AutoFarm do
+                   for _,obj in pairs(Drop:GetDescendants()) do
+                       if obj:IsA("ClickDetector") then
+                           local pos1 = obj.Parent.Position
+                           local pos2 = Jogador.Character.HumanoidRootPart.Position
+                           local distance = (pos1 - pos2).Magnitude
+                           if distance <= 20 then
+                               fireclickdetector(obj)
+                           end
+                       end
+                   end
+                   mouse1click()
+                   wait()
+               end
+            end
+            
+            function OpensLoop()
+               while _G.AutoFarm do
+                   for i = 1, num_opens do
+                       if opens[i].Name == "Open" then
+                           Jogador.Character.HumanoidRootPart.CFrame = opens[i].CFrame
+                           wait(12)
+                       end
+                   end
+               i = 1
+               wait(10)
+               end
+            end
+            
+            -- // Main
+            coroutine.wrap(Farmando)()
+            coroutine.wrap(FarmandoLoop)()
+            coroutine.wrap(OpensLoop)()
+        end    
+    })
+    Macro:AddToggle({
+        Name = "Anti Stomp",
+        Default = false,
+        Callback = function(x)
+            if x == true then
+                game:GetService('RunService'):BindToRenderStep("Anti-Stomp", 0 , function()
+                if game.Players.LocalPlayer.Character.Humanoid.Health <= 5 then
+                    for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+                        if v:IsA('MeshPart') or v:IsA('Part') then
+                            v:Destroy()
+                        end
+                    end
+                    for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+                        if v:IsA('Accessory') then
+                            v.Handle:Destroy()
+                        end
+                    end
+                end
+            end)
+            elseif x == false then
+                game:GetService('RunService'):UnbindFromRenderStep("Anti-Stomp")
+            end
+        end    
+    })
+    Macro:AddToggle({
+        Name = "Anti slow",
+        Default = false,
+        Callback = function(gh)
+            if gh == true then
+                game:GetService('RunService'):BindToRenderStep("Anti-Slow", 0 , function()
+                    if game.Players.LocalPlayer.Character.BodyEffects.Movement:FindFirstChild("NoWalkSpeed") then game.Players.LocalPlayer.Character.BodyEffects.Movement:FindFirstChild("NoWalkSpeed"):Destroy() end
+                    if game.Players.LocalPlayer.Character.BodyEffects.Movement:FindFirstChild("ReduceWalk") then game.Players.LocalPlayer.Character.BodyEffects.Movement:FindFirstChild("ReduceWalk"):Destroy() end
+                    if game.Players.LocalPlayer.Character.BodyEffects.Movement:FindFirstChild("NoJumping") then game.Players.LocalPlayer.Character.BodyEffects.Movement:FindFirstChild("NoJumping"):Destroy() end
+                    if game.Players.LocalPlayer.Character.BodyEffects.Reload.Value == true then game.Players.LocalPlayer.Character.BodyEffects.Reload.Value = false end
+                end)
+            elseif gh == false then
+                game:GetService('RunService'):UnbindFromRenderStep("Anti-Slow")
+            end
+        end    
+    })
+    Macro:AddToggle({
+        Name = "Auto Reload",
+        Default = false,
+        Callback = function(r)
+            if r == true then
+                    game:GetService('RunService'):BindToRenderStep("Auto-Reload", 0 , function()
+                        if game:GetService("Players").LocalPlayer.Character:FindFirstChildWhichIsA("Tool") then
+                            if game:GetService("Players").LocalPlayer.Character:FindFirstChildWhichIsA("Tool"):FindFirstChild("Ammo") then
+                                if game:GetService("Players").LocalPlayer.Character:FindFirstChildWhichIsA("Tool"):FindFirstChild("Ammo").Value <= 0 then
+                                    game:GetService("ReplicatedStorage").MainEvent:FireServer("Reload", game:GetService("Players").LocalPlayer.Character:FindFirstChildWhichIsA("Tool")) 
+                                    wait(1)
+                                end
+                            end
+                        end
+                    end)
+                elseif r == false then
+                    game:GetService('RunService'):UnbindFromRenderStep("Auto-Reload")
+                end
+        end    
+    })
+    local TeleportTab = Window:MakeTab({
+        Name = "TP",
+        Icon = "rbxassetid://4483345998",
+        PremiumOnly = false
+    })
+    TeleportTab:AddButton({
+        Name = "Tactical Shotgun",
+        Callback = function()
+            getgenv().game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(470.877533, 45.1272316, -620.630676, 0.999999821, 0.000604254019, -2.60802135e-08, -0.000604254019, 0.999999821, -8.63220048e-05, -2.60802135e-08, 8.63220048e-05, 1)
+        end})
+
+        TeleportTab:AddButton({
+                Name = "RPG",
+                Callback = function()
+                    getgenv().game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-794.814697, -42.5468521, -932.97998, 5.96046448e-08, 2.91038305e-11, 1, -0.000610388815, 0.999999821, 2.91038305e-11, -0.999999762, -0.000610388815, 5.96046448e-08)
+                end})
+
+                TeleportTab:AddButton({
+                    Name = "SMG",
+                    Callback = function()
+                        getgenv().game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-577.123413, 5.47666788, -718.031433, -1, 0, 0, 0, 1, 0, 0, 0, -1)
+                    end})
+
+
+                    TeleportTab:AddButton({
+                        Name = "ShotGun",
+                        Callback = function()
+                            getgenv().game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-578.623657, 5.47212696, -725.131531, 0, 0, 1, 0, 1, -0, -1, 0, 0)
+                        end})
+
+
+
+                        TeleportTab:AddButton({
+                            Name = "Revolver",
+                            Callback = function()
+                                getgenv().game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-638.75, 18.8500004, -118.175011, -1, 0, 0, 0, 1, 0, 0, 0, -1)
+                            end})
+
+
+                            TeleportTab:AddButton({
+                                Name = "DoubleBarrel",
+                                Callback = function()
+                                    getgenv().game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1039.59985, 18.8513641, -256.449951, -1, 0, 0, 0, 1, 0, 0, 0, -1)
+                                end})
+
+                            
